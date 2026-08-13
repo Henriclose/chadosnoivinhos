@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chá de Casa Nova · 05/09/2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --dark: #1F1F1F;
+      --light: #FFFFFF;
+      --off-white: #F4F4F4;
+      --gray-light: #D9D9D9;
+      --gray-mid: #6B6B6B;
+      --gray-text: #999999;
+      --border-dark: rgba(255,255,255,0.12);
+      --border-light: #E0E0E0;
+      --serif: 'Playfair Display', Georgia, serif;
+      --sans: 'Montserrat', system-ui, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--dark);
+      color: var(--light);
+      overflow-x: hidden;
+    }
+
+    /* ============ NAVBAR ============ */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: var(--dark);
+      border-bottom: 1px solid var(--border-dark);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      height: 60px;
+    }
+
+    .nav-logo {
+      font-family: var(--sans);
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--light);
+      letter-spacing: 1px;
+    }
+
+    .hamburger {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      z-index: 1100;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 26px;
+      height: 2px;
+      background: var(--light);
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* Mobile Menu Overlay */
+    .menu-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 900;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .menu-overlay.active { opacity: 1; pointer-events: all; }
+
+    .mobile-menu {
+      position: fixed;
+      top: 0; right: -320px;
+      width: 300px;
+      height: 100vh;
+      background: #141414;
+      z-index: 950;
+      padding: 80px 32px 40px;
+      transition: right 0.35s cubic-bezier(0.4,0,0.2,1);
+      overflow-y: auto;
+    }
+    .mobile-menu.active { right: 0; }
+
+    .mobile-menu a {
+      display: block;
+      color: var(--light);
+      text-decoration: none;
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border-dark);
+      transition: color 0.2s;
+    }
+    .mobile-menu a:hover { color: var(--gray-light); }
+
+    /* ============ SHARED STYLES ============ */
+    .section-container {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 80px 28px;
+    }
+
+    .eyebrow {
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: var(--gray-mid);
+      margin-bottom: 16px;
+    }
+
+    .eyebrow-light { color: #aaa; }
+
+    .section-title {
+      font-family: var(--serif);
+      font-size: clamp(36px, 8vw, 52px);
+      font-style: italic;
+      line-height: 1.15;
+      margin-bottom: 24px;
+    }
+
+    .divider-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 24px 0;
+    }
+    .divider-row .line {
+      flex: 1;
+      height: 1px;
+      background: rgba(255,255,255,0.2);
+    }
+    .divider-row.dark .line { background: #D9D9D9; }
+    .divider-row .emoji-mid { font-size: 22px; }
+
+    /* ============ HERO ============ */
+    #convite {
+      background: var(--dark);
+      position: relative;
+      overflow: hidden;
+      padding-top: 60px;
+    }
+
+    .hero-deco-number {
+      position: absolute;
+      top: 20px;
+      right: -20px;
+      font-family: var(--serif);
+      font-size: clamp(160px, 35vw, 240px);
+      font-weight: 700;
+      color: rgba(255,255,255,0.04);
+      line-height: 1;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 60px 28px 56px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .hero-eyebrow .line { width: 48px; height: 1px; background: rgba(255,255,255,0.35); }
+    .hero-eyebrow span {
+      font-family: var(--sans);
+      font-size: 12px;
+      letter-spacing: 8px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+    }
+
+    .hero-title {
+      font-family: var(--serif);
+      font-size: clamp(38px, 10vw, 58px);
+      line-height: 1.15;
+      color: var(--light);
+      margin-bottom: 32px;
+    }
+    .hero-title em { font-style: italic; }
+
+    .hero-decoration {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .hero-decoration .line { flex: 1; max-width: 60px; height: 1px; background: rgba(255,255,255,0.3); }
+
+    .hero-desc {
+      font-family: var(--sans);
+      font-size: 16px;
+      font-weight: 300;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.75);
+      margin-bottom: 36px;
+    }
+
+    .hero-btns { display: flex; flex-direction: column; gap: 12px; margin-bottom: 48px; }
+
+    .btn-hero {
+      display: block;
+      width: 100%;
+      padding: 18px 24px;
+      border-radius: 50px;
+      border: 1.5px solid rgba(255,255,255,0.5);
+      background: rgba(255,255,255,0.06);
+      color: var(--light);
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .btn-hero:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.8); }
+
+    .hero-footer {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .hero-footer-date {
+      font-family: var(--sans);
+      font-size: 13px;
+      letter-spacing: 4px;
+      color: rgba(255,255,255,0.55);
+      text-transform: uppercase;
+    }
+    .hero-footer-time {
+      font-family: var(--sans);
+      font-size: 20px;
+      letter-spacing: 4px;
+      color: rgba(255,255,255,0.55);
+      text-transform: uppercase;
+      margin-top: 8px;
+    }
+
+    /* ============ DATA & LOCAL ============ */
+    #local {
+      background: var(--light);
+      color: var(--dark);
+    }
+    #local .eyebrow { color: var(--gray-mid); }
+    #local .section-title { color: var(--dark); font-style: normal; }
+
+    .calendar-card {
+      background: var(--off-white);
+      border: 1px solid var(--border-light);
+      border-radius: 16px;
+      padding: 28px 24px;
+      margin-bottom: 20px;
+    }
+
+    .cal-title {
+      font-family: var(--serif);
+      font-size: 20px;
+      text-align: center;
+      color: var(--dark);
+      margin-bottom: 20px;
+    }
+
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+
+    .cal-head {
+      font-family: var(--sans);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-align: center;
+      color: var(--gray-mid);
+      padding: 6px 0;
+    }
+
+    .cal-day {
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 400;
+      text-align: center;
+      color: var(--dark);
+      padding: 8px 0;
+      border-radius: 50%;
+      line-height: 1;
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cal-day.highlighted {
+      background: var(--dark);
+      color: var(--light);
+      font-weight: 700;
+      border-radius: 50%;
+    }
+
+    .cal-day.empty { visibility: hidden; }
+
+    .cal-note {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 16px;
+      font-family: var(--sans);
+      font-size: 13px;
+      color: var(--dark);
+    }
+    .cal-note .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--dark); flex-shrink: 0; }
+
+    .address-card {
+      background: var(--off-white);
+      border: 1px solid var(--border-light);
+      border-radius: 16px;
+      padding: 32px 24px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .address-pin { font-size: 40px; margin-bottom: 12px; display: block; }
+
+    .address-title {
+      font-family: var(--serif);
+      font-size: 28px;
+      color: var(--dark);
+      margin-bottom: 14px;
+    }
+
+    .address-text {
+      font-family: var(--sans);
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--dark);
+      line-height: 1.6;
+      margin-bottom: 6px;
+    }
+
+    .address-sub {
+      font-family: var(--sans);
+      font-size: 13px;
+      color: var(--gray-mid);
+      margin-bottom: 24px;
+    }
+
+    .btn-maps {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--dark);
+      color: var(--light);
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 16px 28px;
+      border-radius: 50px;
+      transition: background 0.2s;
+    }
+    .btn-maps:hover { background: #333; }
+
+    .map-wrapper {
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid var(--border-light);
+    }
+    .map-wrapper iframe { display: block; width: 100%; height: 260px; border: none; }
+    .map-link-overlay {
+      position: absolute;
+      top: 12px; left: 12px;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(4px);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--dark);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    /* ============ COUNTDOWN ============ */
+    #contagem {
+      background: var(--dark);
+      color: var(--light);
+    }
+
+    .countdown-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 32px 0;
+    }
+
+    .countdown-card {
+      background: #262626;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 32px 16px;
+      text-align: center;
+    }
+
+    .countdown-number {
+      font-family: var(--serif);
+      font-size: clamp(52px, 12vw, 72px);
+      font-weight: 400;
+      color: var(--light);
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+
+    .countdown-label {
+      font-family: var(--sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gray-text);
+    }
+
+    .countdown-note {
+      font-family: var(--sans);
+      font-size: 14px;
+      color: rgba(255,255,255,0.45);
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    /* ============ LISTA DE PRESENTES ============ */
+    #presentes {
+      background: var(--off-white);
+      color: var(--dark);
+    }
+    #presentes .section-container {
+      padding-bottom: 40px;
+    }
+    #presentes .eyebrow { color: var(--gray-mid); }
+    #presentes .section-title { color: var(--dark); }
+
+    .presentes-desc {
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--gray-mid);
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .btn-lista-externa {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: var(--dark);
+      color: var(--light);
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 16px 28px;
+      border-radius: 50px;
+      transition: background 0.2s, transform 0.2s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    }
+    .btn-lista-externa:hover {
+      background: #333;
+      transform: translateY(-1px);
+    }
+
+    /* ============ PALETA ============ */
+    #paleta {
+      background: var(--off-white);
+      color: var(--dark);
+    }
+    #paleta .section-container {
+      padding-top: 40px;
+    }
+    #paleta .eyebrow { color: var(--gray-mid); }
+    #paleta .section-title { color: var(--dark); }
+
+    .colors-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    .color-item { text-align: center; }
+
+    .color-circle {
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      margin: 0 auto 12px;
+      display: block;
+    }
+
+    .color-name {
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--dark);
+      margin-bottom: 2px;
+    }
+    .color-hex {
+      font-family: var(--sans);
+      font-size: 11px;
+      color: var(--gray-mid);
+      letter-spacing: 1px;
+    }
+
+    .paleta-info-card {
+      background: var(--light);
+      border-radius: 16px;
+      padding: 28px 24px;
+      border: 1px solid var(--border-light);
+    }
+    .paleta-info-card p {
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.75;
+      color: #444;
+    }
+    .paleta-info-card strong { color: var(--dark); font-weight: 700; }
+
+    /* ============ MENSAGEM ============ */
+    #mensagem {
+      background: var(--dark);
+      color: var(--light);
+      text-align: center;
+    }
+
+    .msg-emoji { font-size: 52px; margin-bottom: 20px; display: block; }
+
+    .msg-title {
+      font-family: var(--serif);
+      font-size: clamp(32px, 9vw, 52px);
+      line-height: 1.2;
+      color: var(--light);
+      margin-bottom: 28px;
+    }
+
+    .msg-text {
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.75;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 36px;
+    }
+
+    .msg-signature {
+      font-family: var(--serif);
+      font-size: 24px;
+      font-style: italic;
+      color: var(--light);
+      line-height: 1.5;
+    }
+
+    /* ============ FAQ ============ */
+    #faq {
+      background: var(--off-white);
+      color: var(--dark);
+    }
+    #faq .eyebrow { color: var(--gray-mid); }
+    #faq .section-title { color: var(--dark); }
+
+    .faq-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .faq-item {
+      background: var(--light);
+      border: 1px solid var(--border-light);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      width: 100%;
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 20px;
+      text-align: left;
+      gap: 12px;
+    }
+
+    .faq-question span:first-child {
+      font-family: var(--sans);
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--dark);
+      line-height: 1.4;
+      flex: 1;
+    }
+
+    .faq-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--dark);
+      color: var(--light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 300;
+      flex-shrink: 0;
+      transition: transform 0.25s;
+      line-height: 1;
+    }
+
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease, padding 0.25s;
+    }
+    .faq-answer.open { max-height: 200px; }
+
+    .faq-answer-inner {
+      padding: 0 20px 20px;
+      font-family: var(--sans);
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--gray-mid);
+    }
+
+    /* ============ CONFIRMAÇÃO ============ */
+    #confirmacao {
+      background: #F4F4F4;
+      color: var(--dark);
+    }
+    #confirmacao .eyebrow { color: var(--gray-mid); }
+    #confirmacao .section-title { color: var(--dark); }
+
+    .conf-text {
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--gray-mid);
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .conf-text strong { color: var(--dark); font-weight: 700; }
+
+    .form-card {
+      background: var(--light);
+      border-radius: 18px;
+      padding: 28px 24px;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.08);
+    }
+
+    .form-group { margin-bottom: 22px; }
+
+    .form-label {
+      display: block;
+      font-family: var(--sans);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gray-mid);
+      margin-bottom: 10px;
+    }
+
+    .form-input, .form-textarea {
+      width: 100%;
+      font-family: var(--sans);
+      font-size: 15px;
+      padding: 14px 16px;
+      border: 1.5px solid var(--border-light);
+      border-radius: 10px;
+      color: var(--dark);
+      background: var(--light);
+      outline: none;
+      transition: border-color 0.2s;
+      appearance: none;
+    }
+    .form-input:focus, .form-textarea:focus { border-color: var(--dark); }
+    .form-textarea { resize: vertical; min-height: 110px; }
+
+    .toggle-btns { display: flex; gap: 10px; }
+
+    .toggle-btn {
+      flex: 1;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border-light);
+      background: var(--light);
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--dark);
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .toggle-btn.active {
+      background: var(--dark);
+      color: var(--light);
+      border-color: var(--dark);
+    }
+
+    .btn-confirm {
+      width: 100%;
+      padding: 18px;
+      background: var(--dark);
+      color: var(--light);
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 4px;
+    }
+    .btn-confirm:hover { background: #333; }
+
+    /* ============ FOOTER ============ */
+    footer {
+      background: var(--dark);
+      color: var(--light);
+      text-align: center;
+      padding: 60px 28px 40px;
+    }
+
+    .footer-emoji { font-size: 36px; margin-bottom: 16px; display: block; }
+
+    .footer-title {
+      font-family: var(--serif);
+      font-size: 32px;
+      color: var(--light);
+      margin-bottom: 12px;
+    }
+
+    .footer-date {
+      font-family: var(--sans);
+      font-size: 14px;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 4px;
+    }
+
+    .footer-addr {
+      font-family: var(--sans);
+      font-size: 13px;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 32px;
+      line-height: 1.6;
+    }
+
+    .footer-btns { display: flex; flex-direction: column; gap: 10px; margin-bottom: 36px; }
+
+    .btn-footer {
+      display: block;
+      padding: 15px 24px;
+      border: 1.5px solid rgba(255,255,255,0.3);
+      border-radius: 50px;
+      background: transparent;
+      color: var(--light);
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      text-decoration: none;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-footer:hover { border-color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.05); }
+
+    .footer-line { width: 100%; height: 1px; background: rgba(255,255,255,0.1); margin-bottom: 24px; }
+
+    .footer-copy {
+      font-family: var(--sans);
+      font-size: 12px;
+      color: rgba(255,255,255,0.3);
+    }
+
+    /* ============ SECTION ALIGNMENTS ============ */
+    #local .section-container,
+    #presentes .section-container,
+    #paleta .section-container,
+    #faq .section-container,
+    #confirmacao .section-container {
+      text-align: center;
+    }
+
+    #local .section-container > *,
+    #presentes .section-container > *,
+    #paleta .section-container > *,
+    #faq .section-container > * {
+      text-align: left;
+    }
+
+    #local .eyebrow,
+    #local .section-title,
+    #presentes .eyebrow,
+    #presentes .section-title,
+    #paleta .eyebrow,
+    #paleta .section-title,
+    #faq .eyebrow,
+    #faq .section-title,
+    #confirmacao .eyebrow,
+    #confirmacao .section-title {
+      text-align: center;
+    }
+
+    #presentes .divider-row,
+    #paleta .divider-row,
+    #faq .divider-row,
+    #confirmacao .divider-row {
+      justify-content: center;
+    }
+
+    #mensagem .divider-row { justify-content: center; }
+    #contagem .eyebrow, #contagem .section-title { text-align: center; }
+    #contagem .divider-row { justify-content: center; }
+
+    /* ============ RESPONSIVE ============ */
+    @media (min-width: 640px) {
+      .hero-content { padding: 80px 40px 64px; }
+      .section-container { padding: 96px 40px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============ NAVBAR ============ -->
+<nav>
+  <div class="nav-logo">05/09 · 🏡</div>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="menu-overlay" id="menuOverlay"></div>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#convite" onclick="closeMenu()">Convite</a>
+  <a href="#local" onclick="closeMenu()">Data &amp; Local</a>
+  <a href="#contagem" onclick="closeMenu()">Contagem Regressiva</a>
+  <a href="#presentes" onclick="closeMenu()">Lista de Presentes</a>
+  <a href="#paleta" onclick="closeMenu()">Paleta de Cores</a>
+  <a href="#mensagem" onclick="closeMenu()">Mensagem</a>
+  <a href="#faq" onclick="closeMenu()">Perguntas Frequentes</a>
+  <a href="#confirmacao" onclick="closeMenu()">Confirmação de Presença</a>
+</div>
+
+<!-- ============ HERO ============ -->
+<section id="convite">
+  <div class="hero-deco-number">05</div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <div class="line"></div>
+      <span>Convite</span>
+    </div>
+
+    <h1 class="hero-title">
+      Finalmente chegou<br>a hora do nosso<br>
+      <em>Chá de Casa Nova.</em>
+    </h1>
+
+    <div class="hero-decoration">
+      <span>🏡</span>
+      <div class="line"></div>
+      <span>🤍</span>
+    </div>
+
+    <p class="hero-desc">
+      Estamos construindo um lar e seria uma alegria celebrar esse momento com você.
+    </p>
+
+    <div class="hero-btns">
+      <a href="#confirmacao" class="btn-hero">CONFIRMAR PRESENÇA</a>
+      <a href="#presentes" class="btn-hero">VER LISTA DE PRESENTES</a>
+    </div>
+
+    <div class="hero-footer">
+      <span class="hero-footer-date">05 · 09 · 2026 — SÁBADO — 14H00</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DATA & LOCAL ============ -->
+<section id="local">
+  <div class="section-container">
+    <p class="eyebrow">QUANDO &amp; ONDE</p>
+    <h2 class="section-title">Data &amp; Local</h2>
+
+    <!-- Calendar -->
+    <div class="calendar-card">
+      <div class="cal-title">Setembro De 2026</div>
+      <div class="cal-grid">
+        <div class="cal-head">DOM</div>
+        <div class="cal-head">SEG</div>
+        <div class="cal-head">TER</div>
+        <div class="cal-head">QUA</div>
+        <div class="cal-head">QUI</div>
+        <div class="cal-head">SEX</div>
+        <div class="cal-head">SÁB</div>
+        <!-- Row 1: Sep starts Tuesday (index 2) -->
+        <div class="cal-day empty"></div>
+        <div class="cal-day empty"></div>
+        <div class="cal-day">1</div>
+        <div class="cal-day">2</div>
+        <div class="cal-day">3</div>
+        <div class="cal-day">4</div>
+        <div class="cal-day highlighted">5</div>
+        <!-- Row 2 -->
+        <div class="cal-day">6</div>
+        <div class="cal-day">7</div>
+        <div class="cal-day">8</div>
+        <div class="cal-day">9</div>
+        <div class="cal-day">10</div>
+        <div class="cal-day">11</div>
+        <div class="cal-day">12</div>
+        <!-- Row 3 -->
+        <div class="cal-day">13</div>
+        <div class="cal-day">14</div>
+        <div class="cal-day">15</div>
+        <div class="cal-day">16</div>
+        <div class="cal-day">17</div>
+        <div class="cal-day">18</div>
+        <div class="cal-day">19</div>
+        <!-- Row 4 -->
+        <div class="cal-day">20</div>
+        <div class="cal-day">21</div>
+        <div class="cal-day">22</div>
+        <div class="cal-day">23</div>
+        <div class="cal-day">24</div>
+        <div class="cal-day">25</div>
+        <div class="cal-day">26</div>
+        <!-- Row 5 -->
+        <div class="cal-day">27</div>
+        <div class="cal-day">28</div>
+        <div class="cal-day">29</div>
+        <div class="cal-day">30</div>
+      </div>
+      <div class="cal-note">
+        <div class="dot"></div>
+        <span>05 de Setembro de 2026 · 14h00</span>
+      </div>
+    </div>
+
+    <!-- Address Card -->
+    <div class="address-card">
+      <span class="address-pin">📍</span>
+      <h3 class="address-title">Endereço</h3>
+      <p class="address-text">Estrada do Tambory, 1395 - Vila Merces,<br>Carapicuíba - SP</p>
+      <p class="address-sub">CEP 06386-000 · Carapicuíba - SP</p>
+      <a href="https://www.google.com/maps/search/Estrada+do+Tambory+1395+Vila+Merces+Carapicuiba+SP" target="_blank" class="btn-maps">
+        🗺 ABRIR NO GOOGLE MAPS
+      </a>
+    </div>
+
+    <!-- Map -->
+    <div class="map-wrapper">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3659.1!2d-46.83!3d-23.53!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94cf01a1a3b16b7b%3A0x0!2sEstrada%20do%20Tambory%2C%201395%20-%20Vila%20Merces%2C%20Carapicu%C3%ADba%20-%20SP!5e0!3m2!1spt-BR!2sbr!4v1234567890"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        title="Localização do evento">
+      </iframe>
+      <a href="https://www.google.com/maps/search/Estrada+do+Tambory+1395+Vila+Merces+Carapicuiba+SP" target="_blank" class="map-link-overlay">
+        Abrir no Maps ↗
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTAGEM REGRESSIVA ============ -->
+<section id="contagem">
+  <div class="section-container">
+    <p class="eyebrow eyebrow-light" style="text-align:center">FALTAM APENAS</p>
+    <h2 class="section-title" style="color:#fff;text-align:center">Contagem Regressiva</h2>
+
+    <div class="divider-row" style="justify-content:center">
+      <div class="line" style="background:rgba(255,255,255,0.15)"></div>
+      <span class="emoji-mid">⏳</span>
+      <div class="line" style="background:rgba(255,255,255,0.15)"></div>
+    </div>
+
+    <div class="countdown-grid">
+      <div class="countdown-card">
+        <div class="countdown-number" id="cd-days">00</div>
+        <div class="countdown-label">DIAS</div>
+      </div>
+      <div class="countdown-card">
+        <div class="countdown-number" id="cd-hours">00</div>
+        <div class="countdown-label">HORAS</div>
+      </div>
+      <div class="countdown-card">
+        <div class="countdown-number" id="cd-minutes">00</div>
+        <div class="countdown-label">MINUTOS</div>
+      </div>
+      <div class="countdown-card">
+        <div class="countdown-number" id="cd-seconds">00</div>
+        <div class="countdown-label">SEGUNDOS</div>
+      </div>
+    </div>
+
+    <p class="countdown-note">05 de Setembro de 2026 · 14h00</p>
+  </div>
+</section>
+
+<!-- ============ LISTA DE PRESENTES ============ -->
+<section id="presentes">
+  <div class="section-container">
+    <p class="eyebrow">LISTA DE PRESENTES</p>
+    <h2 class="section-title">Nossa Lista de Desejos</h2>
+
+    <div class="divider-row dark" style="justify-content:center">
+      <div class="line"></div>
+      <span class="emoji-mid">🎁</span>
+      <div class="line"></div>
+    </div>
+
+    <p class="presentes-desc">
+      Escolha um item, clique em "Ver produto" para acessar a loja e, após decidir presenteá-lo, clique em "Vou presentear este item" para reservá-lo e evitar presentes repetidos.
+    </p>
+
+    <div style="text-align:center; margin-bottom: 8px;">
+      <a href="https://chadosnoivinhos.listaideal.com.br/pt" target="_blank" rel="noopener noreferrer" class="btn-lista-externa">
+        🎁 ACESSAR LISTA DE PRESENTES
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PALETA DE CORES ============ -->
+<section id="paleta">
+  <div class="section-container">
+    <p class="eyebrow">SUGESTÃO DE CORES</p>
+    <h2 class="section-title">Nossa Paleta</h2>
+
+    <div class="divider-row dark" style="justify-content:center">
+      <div class="line"></div>
+      <span class="emoji-mid">🎨</span>
+      <div class="line"></div>
+    </div>
+
+    <div class="colors-grid">
+      <div class="color-item">
+        <div class="color-circle" style="background:#FFFFFF; border: 2px solid #E0E0E0;"></div>
+        <div class="color-name">Branco</div>
+        <div class="color-hex">#FFFFFF</div>
+      </div>
+      <div class="color-item">
+        <div class="color-circle" style="background:#1F1F1F;"></div>
+        <div class="color-name">Preto</div>
+        <div class="color-hex">#1F1F1F</div>
+      </div>
+      <div class="color-item">
+        <div class="color-circle" style="background:#28322B;"></div>
+        <div class="color-name">Verde Escuro</div>
+        <div class="color-hex">#28322B</div>
+      </div>
+      <div class="color-item">
+        <div class="color-circle" style="background:#D9D9D9;"></div>
+        <div class="color-name">Cinza Médio</div>
+        <div class="color-hex">#D9D9D9</div>
+      </div>
+      <div class="color-item">
+        <div class="color-circle" style="background:#6B6B6B;"></div>
+        <div class="color-name">Cinza Escuro</div>
+        <div class="color-hex">#6B6B6B</div>
+      </div>
+      <div class="color-item">
+        <div class="color-circle" style="background:#C9CDD1; border: 1px solid #E0E0E0;"></div>
+        <div class="color-name">Inox / Prata</div>
+        <div class="color-hex">#C9CDD1</div>
+      </div>
+    </div>
+
+    <div class="paleta-info-card">
+      <p>
+        Escolhemos uma paleta de cores neutras para criar um ambiente harmonioso e aconchegante. Se desejar nos presentear com eletrodomésticos ou aparelhos elétricos, pedimos a gentileza de verificar a voltagem do produto, pois nosso apartamento é <strong>127V</strong>. Assim, garantimos que cada presente possa fazer parte do nosso novo lar desde o primeiro dia.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MENSAGEM ============ -->
+<section id="mensagem">
+  <div class="section-container" style="text-align:center">
+    <span class="msg-emoji">💌</span>
+    <p class="eyebrow eyebrow-light" style="text-align:center">UMA MENSAGEM PARA VOCÊ</p>
+
+    <h2 class="msg-title">
+      O maior presente é compartilhar esse momento com vocês.
+    </h2>
+
+    <div class="divider-row" style="justify-content:center">
+      <div class="line" style="background:rgba(255,255,255,0.2)"></div>
+      <span class="emoji-mid">🤍</span>
+      <div class="line" style="background:rgba(255,255,255,0.2)"></div>
+    </div>
+
+    <p class="msg-text">
+      Caso desejem nos presentear, preparamos uma lista com carinho para facilitar. Mas, acima de tudo, o que realmente importa para nós é ter você por perto nesse novo capítulo das nossas vidas.
+    </p>
+
+    <p class="msg-signature">
+      Com carinho,<br>
+      Os noivos 🏡
+    </p>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="faq">
+  <div class="section-container">
+    <p class="eyebrow">INFORMAÇÕES IMPORTANTES</p>
+    <h2 class="section-title">Perguntas Frequentes</h2>
+
+    <div class="divider-row dark" style="justify-content:center">
+      <div class="line"></div>
+      <span class="emoji-mid" style="color:#e00">❓</span>
+      <div class="line"></div>
+    </div>
+
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Pode levar crianças?</span>
+          <div class="faq-icon">+</div>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">Claro! As crianças são muito bem-vindas.</div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>O local possui estacionamento?</span>
+          <div class="faq-icon">+</div>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">Não há estacionamento no local. Será necessário estacionar os veículos nas ruas próximas ao local do evento.</div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Até quando posso confirmar presença?</span>
+          <div class="faq-icon">+</div>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">Até duas semanas antes do evento.</div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Preciso escolher um presente da lista?</span>
+          <div class="faq-icon">+</div>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">Não é obrigatório! A lista é apenas uma sugestão para facilitar.</div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Como funciona a lista de presentes?</span>
+          <div class="faq-icon">+</div>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">Escolha um item, clique em 'Ver produto' para acessar a loja. Após decidir, clique em 'Vou presentear' para reservar.</div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Qual é a voltagem dos eletrodomésticos?</span>
+          <div class="faq-icon">+</div>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">Nosso apartamento é 127V. Pedimos atenção ao escolher eletrodomésticos.</div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Posso comprar o presente em outra loja?</span>
+          <div class="faq-icon">+</div>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">Sim! O importante é o carinho. A loja indicada é apenas uma sugestão.</div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Posso escolher outro presente que não esteja na lista?</span>
+          <div class="faq-icon">+</div>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">Claro! Qualquer presente será recebido com muito carinho.</div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Posso tirar fotos e compartilhar nas redes sociais?</span>
+          <div class="faq-icon">+</div>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">Com certeza! Adoraríamos ver seus registros desse momento especial.</div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Qual é o maior presente para vocês?</span>
+          <div class="faq-icon">+</div>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">Sua presença! Nada é mais importante do que celebrar com quem amamos.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONFIRMAÇÃO ============ -->
+<section id="confirmacao">
+  <div class="section-container">
+    <p class="eyebrow">PRESENÇA</p>
+    <h2 class="section-title">Confirmação de Presença</h2>
+
+    <div class="divider-row dark" style="justify-content:center">
+      <div class="line"></div>
+      <span class="emoji-mid">✉️</span>
+      <div class="line"></div>
+    </div>
+
+    <p class="conf-text">
+      Adoraríamos ter você aqui! Pedimos a gentileza de confirmar para que possamos organizar tudo com carinho!
+    </p>
+
+    <div class="form-card">
+      <form id="rsvpForm" onsubmit="submitForm(event)">
+        <div class="form-group">
+          <label class="form-label" for="nome">NOME COMPLETO *</label>
+          <input class="form-input" type="text" id="nome" placeholder="Seu nome" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">VOCÊ IRÁ COMPARECER?</label>
+          <div class="toggle-btns">
+            <button type="button" class="toggle-btn active" id="btn-sim" onclick="setAttendance(true)">✔ Sim, vou lá!</button>
+            <button type="button" class="toggle-btn" id="btn-nao" onclick="setAttendance(false)">✖ Não poderei</button>
+          </div>
+          <input type="hidden" id="attendance" value="sim" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="acompanhantes">NÚMERO DE ACOMPANHANTES</label>
+          <input class="form-input" type="number" id="acompanhantes" value="1" min="0" max="10" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="mensagem-form">MENSAGEM (OPCIONAL)</label>
+          <textarea class="form-textarea" id="mensagem-form" placeholder="Deixe um carinho para os noivos..."></textarea>
+        </div>
+
+        <button type="submit" class="btn-confirm">CONFIRMAR PRESENÇA</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <span class="footer-emoji">🏡🤍</span>
+  <h3 class="footer-title">Chá de Casa Nova</h3>
+  <p class="footer-date">05 de Setembro de 2026 · 14h00</p>
+  <p class="footer-addr">Estrada do Tambory, 1395 - Vila Merces,<br>Carapicuíba - SP</p>
+
+  <div class="footer-btns">
+    <a href="#confirmacao" class="btn-footer">CONFIRMAR PRESENÇA</a>
+    <a href="#presentes" class="btn-footer">LISTA DE PRESENTES</a>
+    <a href="https://www.google.com/maps/search/Estrada+do+Tambory+1395+Vila+Merces+Carapicuiba+SP" target="_blank" class="btn-footer">COMO CHEGAR</a>
+  </div>
+
+  <div class="footer-line"></div>
+  <p class="footer-copy">Feito com muito carinho para o nosso novo lar · 2026</p>
+</footer>
+
+<script>
+  /* ============ COUNTDOWN ============ */
+  function updateCountdown() {
+    const target = new Date('2026-09-05T14:00:00-03:00');
+    const now = new Date();
+    const diff = target - now;
+
+    if (diff <= 0) {
+      ['days','hours','minutes','seconds'].forEach(id => {
+        document.getElementById(`cd-${id}`).textContent = '00';
+      });
+      return;
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+    document.getElementById('cd-days').textContent = String(days).padStart(2, '0');
+    document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
+    document.getElementById('cd-minutes').textContent = String(minutes).padStart(2, '0');
+    document.getElementById('cd-seconds').textContent = String(seconds).padStart(2, '0');
+  }
+
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+
+  /* ============ HAMBURGER MENU ============ */
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const menuOverlay = document.getElementById('menuOverlay');
+
+  hamburger.addEventListener('click', () => {
+    const isOpen = mobileMenu.classList.contains('active');
+    if (isOpen) closeMenu(); else openMenu();
+  });
+
+  menuOverlay.addEventListener('click', closeMenu);
+
+  function openMenu() {
+    mobileMenu.classList.add('active');
+    menuOverlay.classList.add('active');
+    hamburger.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMenu() {
+    mobileMenu.classList.remove('active');
+    menuOverlay.classList.remove('active');
+    hamburger.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  /* ============ FAQ ACCORDION ============ */
+  document.querySelectorAll('.faq-question').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      const answer = item.querySelector('.faq-answer');
+      const isOpen = item.classList.contains('open');
+
+      // Close all
+      document.querySelectorAll('.faq-item').forEach(el => {
+        el.classList.remove('open');
+        el.querySelector('.faq-answer').classList.remove('open');
+      });
+
+      if (!isOpen) {
+        item.classList.add('open');
+        answer.classList.add('open');
+      }
+    });
+  });
+
+  /* ============ ATTENDANCE TOGGLE ============ */
+  function setAttendance(going) {
+    document.getElementById('attendance').value = going ? 'sim' : 'nao';
+    document.getElementById('btn-sim').classList.toggle('active', going);
+    document.getElementById('btn-nao').classList.toggle('active', !going);
+  }
+
+  /* ============ FORM SUBMIT ============ */
+  function submitForm(e) {
+    e.preventDefault();
+    const nome = document.getElementById('nome').value.trim();
+    const att = document.getElementById('attendance').value;
+    const acomp = document.getElementById('acompanhantes').value;
+
+    if (!nome) {
+      alert('Por favor, informe seu nome.');
+      return;
+    }
+
+    const msg = att === 'sim'
+      ? `🏡 Presença confirmada com sucesso!\n\nObrigado, ${nome}! Mal podemos esperar para celebrar com você!\n\nNos vemos em 05/09/2026 às 14h00. 🤍`
+      : `Obrigado pela resposta, ${nome}. Sentiremos sua falta! 🤍`;
+
+    alert(msg);
+    e.target.reset();
+    setAttendance(true);
+  }
+</script>
+</body>
+</html>
