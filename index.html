@@ -478,7 +478,7 @@
       color: var(--dark);
     }
     #presentes .section-container {
-      padding-bottom: 40px;
+      padding-bottom: 24px;
     }
     #presentes .eyebrow { color: var(--gray-mid); }
     #presentes .section-title { color: var(--dark); }
@@ -521,7 +521,7 @@
       color: var(--dark);
     }
     #paleta .section-container {
-      padding-top: 40px;
+      padding-top: 24px;
     }
     #paleta .eyebrow { color: var(--gray-mid); }
     #paleta .section-title { color: var(--dark); }
@@ -769,6 +769,32 @@
       margin-top: 4px;
     }
     .btn-confirm:hover { background: #333; }
+    .btn-confirm:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    .form-feedback {
+      display: none;
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 10px;
+      font-family: var(--sans);
+      font-size: 14px;
+      line-height: 1.5;
+      text-align: center;
+    }
+    .form-feedback.show { display: block; }
+    .form-feedback.success {
+      background: #eaf7ee;
+      color: #1f6b3a;
+      border: 1px solid #b7e0c2;
+    }
+    .form-feedback.error {
+      background: #fdeeee;
+      color: #8a1f1f;
+      border: 1px solid #f0c0c0;
+    }
 
     /* ============ FOOTER ============ */
     footer {
@@ -1290,7 +1316,7 @@
       <form id="rsvpForm" onsubmit="submitForm(event)">
         <div class="form-group">
           <label class="form-label" for="nome">NOME COMPLETO *</label>
-          <input class="form-input" type="text" id="nome" placeholder="Seu nome" required />
+          <input class="form-input" type="text" id="nome" name="nome" placeholder="Seu nome" required />
         </div>
 
         <div class="form-group">
@@ -1299,20 +1325,21 @@
             <button type="button" class="toggle-btn active" id="btn-sim" onclick="setAttendance(true)">✔ Sim, vou lá!</button>
             <button type="button" class="toggle-btn" id="btn-nao" onclick="setAttendance(false)">✖ Não poderei</button>
           </div>
-          <input type="hidden" id="attendance" value="sim" />
+          <input type="hidden" id="attendance" name="attendance" value="Sim" />
         </div>
 
         <div class="form-group">
           <label class="form-label" for="acompanhantes">NÚMERO DE ACOMPANHANTES</label>
-          <input class="form-input" type="number" id="acompanhantes" value="1" min="0" max="10" />
+          <input class="form-input" type="number" id="acompanhantes" name="acompanhantes" value="1" min="0" max="10" />
         </div>
 
         <div class="form-group">
           <label class="form-label" for="mensagem-form">MENSAGEM (OPCIONAL)</label>
-          <textarea class="form-textarea" id="mensagem-form" placeholder="Deixe um carinho para os noivos..."></textarea>
+          <textarea class="form-textarea" id="mensagem-form" name="mensagem" placeholder="Deixe um carinho para os noivos..."></textarea>
         </div>
 
-        <button type="submit" class="btn-confirm">CONFIRMAR PRESENÇA</button>
+        <button type="submit" class="btn-confirm" id="btn-submit-rsvp">CONFIRMAR PRESENÇA</button>
+        <div class="form-feedback" id="form-feedback"></div>
       </form>
     </div>
   </div>
@@ -1411,30 +1438,88 @@
 
   /* ============ ATTENDANCE TOGGLE ============ */
   function setAttendance(going) {
-    document.getElementById('attendance').value = going ? 'sim' : 'nao';
+    document.getElementById('attendance').value = going ? 'Sim' : 'Não';
     document.getElementById('btn-sim').classList.toggle('active', going);
     document.getElementById('btn-nao').classList.toggle('active', !going);
   }
 
+  /* ============ GOOGLE SHEETS (Apps Script) ============
+     1. Abra a planilha:
+        https://docs.google.com/spreadsheets/d/1oeuGhI9zqDUlvpxsIe3xTAUfh6tm0ia3RzoNNz9l8Rc/edit
+     2. Extensões > Apps Script
+     3. Apague o código padrão e cole o conteúdo do arquivo google-apps-script.gs
+     4. Implantar > Nova implantação > Tipo: App da Web
+        - Executar como: Eu
+        - Quem tem acesso: Qualquer pessoa
+     5. Copie a URL da implantação e cole abaixo em GOOGLE_SCRIPT_URL
+  */
+  const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxPLACEHOLDER/exec';
+  const SHEET_ID = '1oeuGhI9zqDUlvpxsIe3xTAUfh6tm0ia3RzoNNz9l8Rc';
+
+  function showFeedback(type, message) {
+    const el = document.getElementById('form-feedback');
+    el.className = 'form-feedback show ' + type;
+    el.textContent = message;
+  }
+
   /* ============ FORM SUBMIT ============ */
-  function submitForm(e) {
+  async function submitForm(e) {
     e.preventDefault();
+
     const nome = document.getElementById('nome').value.trim();
-    const att = document.getElementById('attendance').value;
-    const acomp = document.getElementById('acompanhantes').value;
+    const attendance = document.getElementById('attendance').value;
+    const acompanhantes = document.getElementById('acompanhantes').value || '0';
+    const mensagem = document.getElementById('mensagem-form').value.trim();
+    const btn = document.getElementById('btn-submit-rsvp');
+    const feedback = document.getElementById('form-feedback');
+
+    feedback.className = 'form-feedback';
+    feedback.textContent = '';
 
     if (!nome) {
-      alert('Por favor, informe seu nome.');
+      showFeedback('error', 'Por favor, informe seu nome.');
       return;
     }
 
-    const msg = att === 'sim'
-      ? `🏡 Presença confirmada com sucesso!\n\nObrigado, ${nome}! Mal podemos esperar para celebrar com você!\n\nNos vemos em 05/09/2026 às 14h00. 🤍`
-      : `Obrigado pela resposta, ${nome}. Sentiremos sua falta! 🤍`;
+    if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes('PLACEHOLDER')) {
+      showFeedback('error', 'A integração com a planilha ainda precisa ser configurada. Publique o Apps Script e cole a URL em GOOGLE_SCRIPT_URL.');
+      return;
+    }
 
-    alert(msg);
-    e.target.reset();
-    setAttendance(true);
+    const payload = {
+      sheetId: SHEET_ID,
+      timestamp: new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
+      nome: nome,
+      attendance: attendance,
+      acompanhantes: acompanhantes,
+      mensagem: mensagem
+    };
+
+    btn.disabled = true;
+    btn.textContent = 'ENVIANDO...';
+
+    try {
+      await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      });
+
+      const successMsg = attendance === 'Sim'
+        ? `🏡 Presença confirmada, ${nome}! Mal podemos esperar para celebrar com você. Nos vemos em 05/09/2026 às 14h00. 🤍`
+        : `Obrigado pela resposta, ${nome}. Sentiremos sua falta! 🤍`;
+
+      showFeedback('success', successMsg);
+      e.target.reset();
+      setAttendance(true);
+    } catch (err) {
+      console.error(err);
+      showFeedback('error', 'Não foi possível enviar sua confirmação. Tente novamente em instantes.');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'CONFIRMAR PRESENÇA';
+    }
   }
 </script>
 </body>
